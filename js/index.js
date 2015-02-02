@@ -211,14 +211,14 @@ $(function(){
     $("#plusimg").click(function(){
         if(fadeimg < 1){
             fadeimg = fadeimg + 0.1;
-            $( "#draggable-test" ).fadeTo( "fast", fadeimg, function() {});
+            $( "#myCreepyThumbimgId" ).fadeTo( 0, fadeimg, function() {});
         }        
     });
 
     $("#minusimg").click(function(){
         if(fadeimg > 0.2){
             fadeimg = fadeimg - 0.1;
-            $( "#draggable-test" ).fadeTo( "fast", fadeimg, function() {});
+            $( "#myCreepyThumbimgId" ).fadeTo( 0, fadeimg, function() {});
         } 
     });
 
@@ -279,7 +279,7 @@ $(function(){
                 },
             };      
 
-            var creepyimgItem = $('<div><img  src="'+imgObj.url +'" /></div>').rotatable(params);
+            var creepyimgItem = $('<div><img src="'+imgObj.url +'" id="myCreepyThumbimgId" /></div>').rotatable(params);
             var resizable = $('<div class="resizable-item" id="resizable-item" > </div>').resizable({
                 aspectRatio: true,
                 //handles: 'ne, se, sw, nw'

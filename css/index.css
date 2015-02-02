@@ -196,13 +196,14 @@ canvas {
 }
 
 .ui-rotatable-handle {
-    height: 24px;
-    width: 24px;
+    height: 30px;
+    width: 30px;
     cursor: pointer;
     background-image: url(../img/rotate.png);
     background-size: 100%;
     right: -25px !important;
     bottom: -25px !important;
+    opacity: 0.7;
 }
 
 .ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se {
