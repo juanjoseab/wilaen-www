@@ -33,7 +33,7 @@ $(function(){
     setInterval(function(){
         var windowHeight = $(window).height();
         var ctrlBtnW = $(".wrap_controls div img").width();
-        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 3).css("margin-left",ctrlBtnW + 'px');
+        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 3).css("margin-left",ctrlBtnW + "px !important");
     },500);
 
     resizes();
@@ -132,7 +132,7 @@ $(function(){
         
     }
 
-    function openCamera() {        
+    function openCamera() {
         navigator.camera.getPicture(function(imageData){
             photoData = imageData;
             createCanvas();
@@ -312,7 +312,12 @@ $(function(){
     
 
     $("#guardarImg").click(function(){
-        guarderImagen();
+        if(confirm('\u00BFRealmente deseas guardar esta imagen en tu CreepyAlbum?')){
+            guarderImagen();    
+        }else{
+            return false;
+        }
+        
 
         /*
         navigator.notification.confirm(
@@ -324,12 +329,11 @@ $(function(){
     });
 
     $("#cancelimg").click(function(){
-        navigator.notification.confirm(
-            '\u00BFRealmente eliminar esta imagen?',  // message
-            function(){ cancelarImagen(); },         // callback
-            'CreepyPic',            // title
-            ['Si','No']                  // buttonName
-        );
+        if(confirm('\u00BFRealmente eliminar esta imagen?')){
+            cancelarImagen();    
+        }else{
+            return false;
+        };
 
     });
 
@@ -386,13 +390,9 @@ $(function(){
                 $('.gallery-item-box').height($(window).width()/3);
                 $.mobile.changePage("#mycreepygallery", { transition: "flip", changeHash: false });
             }else{
-                //alert("Aun no has creado ninguna creepyPic");
-                navigator.notification.alert(
-                    'A\u00fan no tienes fotos en tu CreepyAlbum',  // message
-                    function(){ return false;},         // callback
-                    'Album CreepyPic',            // title
-                    'De acuerdo'                  // buttonName
-                );
+
+                alert('A\u00fan no tienes fotos en tu CreepyAlbum')
+                
             }
         });
         },
