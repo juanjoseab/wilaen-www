@@ -351,7 +351,16 @@ $(function(){
             console.log(lienzo);
             $("img#myCreepyThumbimgId").remove();
             var imgData = canvas.toDataURL();
-            window.dbo.saveImg(imgData);
+            window.dbo.db.transaction(function(tr){
+                    console.log("Guardando imagen");
+                    tr.executeSql('INSERT INTO mygallery (uri) VALUES ( "'+imgData+'");');
+                }, function(trerr){
+                    console.log(trerr.message);
+                    return false;
+                }, function(tr){
+                    //console.log(tr);
+                    return true;
+                });
             prepareMyCreepyGallery();
             $("#canvasContent canvas").remove();
             $("#draggable-test").remove();
