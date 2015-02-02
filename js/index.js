@@ -10,6 +10,7 @@ $(function(){
     window.dbo.init();
     var imgs = [];
     var imgObj = [];
+    imgObj.angle = 0;
     var selectPic;
     var canvas;
     var fadeimg = 1;
@@ -32,7 +33,7 @@ $(function(){
     setInterval(function(){
         var windowHeight = $(window).height();
         var ctrlBtnW = $(".wrap_controls div img").width();
-        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5);
+        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 3).css("margin-left",ctrlBtnW + 'px');
     },500);
 
     resizes();
@@ -276,6 +277,8 @@ $(function(){
                 },
                 // Callback fired on rotation end.
                 stop: function(event, ui) {
+                    imgObj.angle = ui.angle.stop;
+                    //console.log(ui.angle.stop);
                 },
             };      
 
@@ -309,13 +312,15 @@ $(function(){
     
 
     $("#guardarImg").click(function(){
+        guarderImagen();
 
+        /*
         navigator.notification.confirm(
             '\u00BFRealmente deseas guardar esta imagen en tu CreepyAlbum?',  // message
             function(){ guarderImagen(); },         // callback
             'CreepyPic',            // title
             ['Si','No']                  // buttonName
-        );
+        );*/
     });
 
     $("#cancelimg").click(function(){
@@ -333,16 +338,19 @@ $(function(){
         imagen.src = imgObj.url;
         var lienzo = canvas.getContext("2d");
         $(imagen).on("load",function(){            
-            var imgW = $("#draggable-test > img").width();
-            var imgH = $("#draggable-test > img").height();;
+            var imgW = $("img#myCreepyThumbimgId").width();
+            var imgH = $("img#myCreepyThumbimgId").height();;
             //console.log(imgH + " - " + imgW);
             lienzo.globalAlpha = fadeimg;
+            lienzo.rotate(imgObj.angle*Math.PI/180);
             lienzo.drawImage(imagen,imgObj.left,imgObj.top,imgW,imgH);
             console.log(lienzo);
-            $("#draggable-test > img").remove();
+            $("img#myCreepyThumbimgId").remove();
             var imgData = canvas.toDataURL();
             window.dbo.saveImg(imgData);
             prepareMyCreepyGallery();
+            $("#canvasContent canvas").remove();
+            $("#draggable-test").remove();
         });
     }
 

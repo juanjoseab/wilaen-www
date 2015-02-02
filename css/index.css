@@ -313,12 +313,13 @@ div.ui-block-b.creepy-galleryitem span {
 	background: url(../img/controls/bg.png) repeat;
 	border-left: 1px #333 solid;
 	z-index: 99999999999999999;
-	
+	position: absolute;
+	bottom: 0;
 }
 
 .wrap_controls div {
 	overflow: hidden;
-	margin: 0 auto !important;
+	/*margin: 0 auto !important;*/
 }
 
 .wrap_controls img {
