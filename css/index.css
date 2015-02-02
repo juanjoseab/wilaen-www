@@ -1,0 +1,342 @@
+/** layout **/
+
+@font-face {
+    font-family: 'piedra';
+    src: url('../fonts/Piedra-Regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Piedra-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/Piedra-Regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/Piedra-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/Piedra-Regular.svg#Piedra-Regular') format('svg'); /* Legacy iOS */
+}
+@font-face {
+    font-family: 'amarante';
+    src: url('../fonts/Amarante-Regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/Amarante-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/Amarante-Regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/Amarante-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/Amarante-Regular.svg#Amarante-Regular') format('svg'); /* Legacy iOS */
+}
+@font-face {
+    font-family: 'unicaone';
+    src: url('../fonts/UnicaOne-Regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/UnicaOne-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/UnicaOne-Regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/UnicaOne-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/UnicaOne-Regular.svg#UnicaOne-Regular') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+    font-family: 'opensans';
+    src: url('../fonts/OpenSans-Regular.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/OpenSans-Regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../fonts/OpenSans-Regular.woff') format('woff'), /* Modern Browsers */
+    url('../fonts/OpenSans-Regular.ttf') format('truetype'), /* Safari, Android, iOS */
+    url('../fonts/OpenSans-Regular.svg#OpenSans-Regular') format('svg'); /* Legacy iOS */
+}
+
+body {
+	height: 100%;
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-image: url(../img/fondo.jpg);
+    background-size: auto 100%;  
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: bottom center;
+    font-family: 'opensans',sans-serif;
+}
+
+.ui-page {
+	background: none !important;
+}
+
+.title {
+	font-family: 'piedra', sans-serif;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+}
+
+.home_center_container {
+	position: absolute;
+	width: 100%;
+	color: #fff;
+}
+#home .title {
+	font-size: 72px;
+}
+#nuevacreepy .title {
+	font-size: 50px;
+}
+.home_center_container p {
+	text-align: center;
+	font-size: 16px;
+	margin-top: 15px;
+	width: 75%;
+	max-width: 400px;
+	margin: 0 auto;
+	color: #fff;
+}
+
+.footer, .ui-footer {
+	background: none !important;
+	border: none !important;
+}
+
+.footer-create {
+	display: none;
+}
+canvas#lienzo{
+	margin: auto;
+}
+
+#canvasFooter {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+
+canvas {
+	margin: auto;
+	display: block;
+
+}
+
+#home .ui-content, #create .ui-content, #creepygallery .ui-content, #mycreepygallery .ui-content{
+	padding: 0 !important;
+}
+
+#canvasContent {
+	overflow: hidden;	
+}
+
+
+.draggable-test {
+	border: none;
+	width: 50% !important;
+	color: #fff;	
+	position: relative !important; 
+	z-index: 999;
+	display: -moz-inline-stack;
+    display: inline !important;
+    vertical-align: top;
+    *display: inline;   
+    cursor: hand; 
+    cursor: pointer
+}
+
+.resizable-item {
+	border: none;	
+	width: 100%;
+	top: 0 !important;
+	left: 0 !important;
+	height: auto;
+	position: absolute;
+	width: 250px;
+}
+
+.resizable-item img {
+	width: 100%;
+	height: auto;
+}
+
+.canvasOverLayer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 200px;
+}
+
+.ui-resizable-handle 
+{
+    
+    border: 0px solid #FFF;
+    width: 30px;
+    height: 30px;    
+    z-index: 99999999999;
+    position: absolute;
+ 
+    opacity: 0.7;
+    background:none;
+}
+.ui-resizable-se
+{
+	display: block !important;
+	position: absolute;
+    right: -5px;
+    bottom: -5px;
+}
+
+.ui-resizable-sw
+{
+	display: block !important;
+	position: absolute;
+    left: -5px;
+    bottom: -5px;
+}
+.ui-resizable-nw
+{
+	display: block !important;
+	position: absolute;
+    top: -5px;
+    right: -5px;
+    
+}
+
+.ui-resizable-ne {
+	display: block !important;
+	position: absolute;
+	left:  -5px;
+	top: -5px;
+	
+}
+
+.ui-rotatable-handle {
+    height: 24px;
+    width: 24px;
+    cursor: pointer;
+    background-image: url(../img/rotate.png);
+    background-size: 100%;
+    right: -25px !important;
+    bottom: -25px !important;
+}
+
+.ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se {
+	background-color: none;
+	background-image: url('../img/rz.png');
+	background-size: 100% 100%; 
+}
+
+.creepyfooter {
+	position: absolute;
+	height: 120px;
+	width: 100%;
+	bottom: 0;
+	color: #cb0000 !important;
+	text-shadow:none;
+	overflow: hidden;
+}
+
+.creepyfooter span {	
+	color: #cb0000 !important;
+	text-shadow:none;
+	font-family: 'unicaone', sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	display: block;
+	width: 50%;
+	float: left;
+	text-align: center;
+}
+
+
+.creepyfooter span img {
+	height: 55px;
+	display: block;
+	margin: 0 auto 5px auto;
+}
+
+.creepyfooter div {	
+	color: #cb0000 !important;
+	text-shadow:none;
+	font-family: 'unicaone', sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	display: block;
+	width: 33%;
+	float: left;
+	text-align: center;
+}
+
+.creepyfooter div img {
+	height: 55px;
+	display: block;
+	margin: 0 auto 5px auto;
+}
+
+div.ui-block-b.creepy-galleryitem, .mygalleryitem {
+	min-height: 100px;
+	background-size: 100%  auto !important;
+	background-repeat: no-repeat;
+	background-position: center center;
+	position: relative;
+}
+.gallery-item-box {
+	width: 30%;
+	margin: 1%;
+	float: left;
+	overflow: hidden;
+	margin: 1px #ccc solid;
+}
+.gallery-item-box .mygalleryimg {
+	width: 100%;
+	height: auto;
+}
+
+
+
+div.ui-block-b.creepy-galleryitem span {
+	display: block;
+	width: 100%;
+	background-color: #333;
+	color: #fff;
+	font-size: 14px;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+}
+
+#creepyImgBox img {
+	width: 100%;
+	height: auto;
+}
+
+#canvas_controls {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 99999999;
+	height: 100%;
+	width: 15%;
+	min-width: 40px;
+	max-width: 64px;
+	/*background: url(../img/controls/bg.png) repeat;
+	border-left: 1px #333 solid;*/
+}
+
+.wrap_controls {
+	background: url(../img/controls/bg.png) repeat;
+	border-left: 1px #333 solid;
+	z-index: 99999999999999999;
+	
+}
+
+.wrap_controls div {
+	overflow: hidden;
+	margin: 0 auto !important;
+}
+
+.wrap_controls img {
+	width: auto;
+	height: 100%;
+	float: left;
+	margin: 0;
+	padding:0;
+
+}
+
+
+#canvas_controls img {
+	display: block;
+	width: 70%;
+	margin: 5px auto;
+	opacity: 0.7;
+}
+
+#canvas_controls img:hover {
+	opacity: 1;
+}

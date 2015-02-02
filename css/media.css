@@ -1,0 +1,78 @@
+
+
+@media all and (min-width: 600px) {
+    #home .title {
+		font-size: 150px;
+	}
+}
+
+@media all and (min-width: 700px) {
+	#home .title {
+		font-size: 130px;
+	}
+
+	#nuevacreepy .title {
+		font-size: 100px;
+	}
+	.home_center_container p {
+		font-size: 30px;
+		width: 80%;
+		max-width: 700px;
+	}
+
+	.creepyfooter {
+		height: 20%;
+		
+	}
+
+	.creepyfooter span {		
+		font-size: 30px;
+	}
+	.creepyfooter div {		
+		font-size: 30px;
+	}
+
+	.creepyfooter span img {
+		height: 90px;
+	}
+
+	.creepyfooter div img {
+		height: 90px;
+	}
+}
+
+@media all and (min-width: 1025px) {
+    #home .title {
+		font-size: 200px;
+	}
+
+	#nuevacreepy .title {
+		font-size: 150px;
+	}
+	.home_center_container p {
+		font-size: 45px;
+		width: 80%;
+		max-width: 800px;
+	}
+
+	.creepyfooter {
+		height: 25%;
+		
+	}
+
+	.creepyfooter span {		
+		font-size: 50px;
+	}
+	.creepyfooter div {		
+		font-size: 50px;
+	}
+
+	.creepyfooter span img {
+		height: 155px;
+	}
+
+	.creepyfooter div img {
+		height: 155px;
+	}
+
+}
