@@ -25,7 +25,7 @@ $(function(){
                 //console.log("tengo rows");
             }else{
                 //console.log("no tengo rows");
-                window.dbo.db.transaction(function(tr){
+                db.transaction(function(tr){
                     console.log("ejecutanto statements");
                     tr.executeSql('CREATE TABLE IF NOT EXISTS mygallery (id INTEGER PRIMARY KEY, uri);');
                     tr.executeSql('CREATE TABLE IF NOT EXISTS img (id INTEGER PRIMARY KEY, name, uri);');
@@ -56,6 +56,7 @@ $(function(){
             return true;
         });
     }
+    checkDb();
 
     function saveImgOnDB(imgdata){
         db.transaction(function(tr){
@@ -88,7 +89,7 @@ $(function(){
     setInterval(function(){
         var windowHeight = $(window).height();
         var ctrlBtnW = $(".wrap_controls div img").width();
-        //$(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css("margin-left",ctrlBtnW + "px !important");
+        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css("margin-left",ctrlBtnW + "px !important");
     },500);
 
     resizes();
@@ -136,14 +137,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        openAlbum();
-        //openAlbumTest();
+        //openAlbum();
+        openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        openCamera();
-        //openCameraTest();
+        //openCamera();
+        openCameraTest();
     });
 
 
@@ -280,7 +281,7 @@ $(function(){
 
     $("#openCreepyAlbum").click(function(){
         $("#CreepyGalleryContent div").remove();
-        window.dbo.db.transaction(function(tx){
+        db.transaction(function(tx){
             tx.executeSql("SELECT * FROM img",null,function(tx,results){
                 //console.log(results.rows);
             if(results.rows.length > 0){
@@ -332,8 +333,16 @@ $(function(){
                 },
                 // Callback fired on rotation end.
                 stop: function(event, ui) {
-                    imgObj.angle = ui.angle.stop;
-                    //console.log(ui.angle.stop);
+                    imgObj.angle = (ui.angle.stop * 180 / (Math.PI));
+                    if(imgObj.angle< 0){
+                        imgObj.angle = 360 - (-1 * imgObj.angle);
+                    }
+                    /*if(imgObj.angle < 0){
+                        console.log(123)
+                        imgObj.angle = Math.round(imgObj.angle* 100) / 100;
+                    }*/
+                    console.log(imgObj.angle);
+                    //console.log(imgObj.angle);
                 },
             };      
 
@@ -401,12 +410,13 @@ $(function(){
             var imgH = $("img#myCreepyThumbimgId").height();;
             //console.log(imgH + " - " + imgW);
             lienzo.globalAlpha = fadeimg;
-            lienzo.rotate(imgObj.angle*Math.PI/180);
+            imgangle = Math.round(imgObj.angle * 100) / 100 ;            
+            lienzo.rotate(imgangle);
             lienzo.drawImage(imagen,imgObj.left,imgObj.top,imgW,imgH);
-            console.log(lienzo);
+            //console.log(lienzo);
             $("img#myCreepyThumbimgId").remove();
             var imgData = canvas.toDataURL();
-            window.dbo.db.transaction(function(tr){
+            db.transaction(function(tr){
                 console.log("Guardando imagen");
                 tr.executeSql('INSERT INTO mygallery (uri) VALUES ( "'+imgData+'");');
             }, function(trerr){
@@ -476,37 +486,7 @@ $(function(){
     });
 
     // Window load event used just in case window height is dependant upon images
-$(window).bind("load", function() { 
-       
-       var footerHeight = 0,
-           footerTop = 0,
-           $footer = $("#wrap_controls");
-           
-       positionFooter();
-       
-       function positionFooter() {       
-                footerHeight = $footer.height();
-                footerTop = ($(window).scrollTop()+$(window).height()-footerHeight)+"px";
-       
-               if ( ($(document.body).height()+footerHeight) < $(window).height()) {
-                   $footer.css({
-                        position: "absolute"
-                   }).animate({
-                        top: footerTop
-                   })
-               } else {
-                   $footer.css({
-                        position: "static"
-                   })
-               }
-               
-       }
 
-       $(window)
-               .scroll(positionFooter)
-               .resize(positionFooter)
-               
-});
 
 
 });

@@ -220,6 +220,7 @@ canvas {
 	color: #cb0000 !important;
 	text-shadow:none;
 	overflow: hidden;
+	z-index: 9999999999999999;
 }
 
 .creepyfooter span {	
