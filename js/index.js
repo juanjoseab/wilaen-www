@@ -33,7 +33,7 @@ $(function(){
     setInterval(function(){
         var windowHeight = $(window).height();
         var ctrlBtnW = $(".wrap_controls div img").width();
-        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 3).css("margin-left",ctrlBtnW + "px !important");
+        //$(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css("margin-left",ctrlBtnW + "px !important");
     },500);
 
     resizes();
@@ -352,15 +352,15 @@ $(function(){
             $("img#myCreepyThumbimgId").remove();
             var imgData = canvas.toDataURL();
             window.dbo.db.transaction(function(tr){
-                    console.log("Guardando imagen");
-                    tr.executeSql('INSERT INTO mygallery (uri) VALUES ( "'+imgData+'");');
-                }, function(trerr){
-                    console.log(trerr.message);
-                    return false;
-                }, function(tr){
-                    //console.log(tr);
-                    return true;
-                });
+                console.log("Guardando imagen");
+                tr.executeSql('INSERT INTO mygallery (uri) VALUES ( "'+imgData+'");');
+            }, function(trerr){
+                console.log(trerr.message);
+                return false;
+            }, function(tr){
+                //console.log(tr);
+                return true;
+            });
             prepareMyCreepyGallery();
             $("#canvasContent canvas").remove();
             $("#draggable-test").remove();
@@ -381,7 +381,6 @@ $(function(){
 
     $("#gotoMyCreepyGallery, .gotoMyCreepyGallery").click(function(){
         prepareMyCreepyGallery();
-
     });
     
 
@@ -419,5 +418,40 @@ $(function(){
         $('#creepyImgBox').append('<img src="'+img_src+'" />');
         selectPic = img_src;
         $.mobile.changePage("#mycreepyimage", { transition: "flip", changeHash: false });
-    })
+    });
+
+    // Window load event used just in case window height is dependant upon images
+$(window).bind("load", function() { 
+       
+       var footerHeight = 0,
+           footerTop = 0,
+           $footer = $("#wrap_controls");
+           
+       positionFooter();
+       
+       function positionFooter() {       
+                footerHeight = $footer.height();
+                footerTop = ($(window).scrollTop()+$(window).height()-footerHeight)+"px";
+       
+               if ( ($(document.body).height()+footerHeight) < $(window).height()) {
+                   $footer.css({
+                        position: "absolute"
+                   }).animate({
+                        top: footerTop
+                   })
+               } else {
+                   $footer.css({
+                        position: "static"
+                   })
+               }
+               
+       }
+
+       $(window)
+               .scroll(positionFooter)
+               .resize(positionFooter)
+               
+});
+
+
 });
