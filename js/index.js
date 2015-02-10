@@ -82,7 +82,7 @@ $(function(){
         $("#nuevacreepy .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
         //$('.creepyfooter').css('bottom',windowHeight - 120 + "px");
         $('.creepyfooter').css('bottom',0);
-        
+
     }
 
     setInterval(function(){
@@ -136,14 +136,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        //openAlbum();
-        openAlbumTest();
+        openAlbum();
+        //openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        //openCamera();
-        openCameraTest();
+        openCamera();
+        //openCameraTest();
     });
 
 
