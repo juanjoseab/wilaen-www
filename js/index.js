@@ -7,7 +7,7 @@
 
 $(function(){
     FastClick.attach(document.body);
-    window.dbo.init();
+    //window.dbo.init();
     var imgs = [];
     var imgObj = [];
     imgObj.angle = 0;
@@ -15,6 +15,60 @@ $(function(){
     var canvas;
     var fadeimg = 1;
     var photoData;
+    var db = window.openDatabase("Database", "1.0", "dbtx", 2000000000);
+
+    function checkDb(){
+        db.transaction(function(tx){
+            tx.executeSql("SELECT * FROM sqlite_master WHERE type='table' AND name='img'",null,function(tx,results){
+            //console.log(results);
+            if(results.rows.length > 0) {
+                //console.log("tengo rows");
+            }else{
+                //console.log("no tengo rows");
+                window.dbo.db.transaction(function(tr){
+                    console.log("ejecutanto statements");
+                    tr.executeSql('CREATE TABLE IF NOT EXISTS mygallery (id INTEGER PRIMARY KEY, uri);');
+                    tr.executeSql('CREATE TABLE IF NOT EXISTS img (id INTEGER PRIMARY KEY, name, uri);');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Ovni", "img/pics/ovni.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Creepy Chica", "img/pics/aro.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Samara", "img/pics/aro2.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Alien Oscuro", "img/pics/alien1.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Alien Claro", "img/pics/alien2.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Chica Zombi", "img/pics/chica-zombi.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Zombi", "img/pics/zombi.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Chupacabras", "img/pics/chupacabras.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Fantasmas", "img/pics/ninos-fantasma.png");');
+                    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Cara malvada", "img/pics/face.png");');
+                }, function(trerr){
+                    console.log(trerr.message);
+                    return false;
+                }, function(tr){
+                    console.log(tr);
+                    return true;
+                });
+                
+            }
+         });
+
+        }, function(){
+            return false;
+        }, function(){
+            return true;
+        });
+    }
+
+    function saveImgOnDB(imgdata){
+        db.transaction(function(tr){
+            console.log("Guardando imagen");
+            tr.executeSql('INSERT INTO mygallery (uri) VALUES ( "'+imgdata+'");');
+        }, function(err){
+            console.log(err.message);
+            return false;
+        }, function(tr){
+            //console.log(tr);
+            return true;
+        });
+    }
 
     function resizes(){
         var windowHeight = $(window).height();
@@ -28,6 +82,7 @@ $(function(){
         $("#nuevacreepy .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
         //$('.creepyfooter').css('bottom',windowHeight - 120 + "px");
         $('.creepyfooter').css('bottom',0);
+        
     }
 
     setInterval(function(){

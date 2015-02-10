@@ -24,7 +24,6 @@ window.dbo = {
 				    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Chupacabras", "img/pics/chupacabras.png");');
 				    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Fantasmas", "img/pics/ninos-fantasma.png");');
 				    tr.executeSql('INSERT INTO img (name, uri) VALUES ("Cara malvada", "img/pics/face.png");');
-				    console.log("fin de los  statements");
 				}, function(trerr){
 					console.log(trerr.message);
 					return false;
