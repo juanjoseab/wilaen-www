@@ -441,7 +441,7 @@ $(function(){
 
     function prepareMyCreepyGallery (){
         $("#MyCreepyGalleryContent *").remove();
-        window.dbo.db.transaction(function(tx){
+        db.transaction(function(tx){
             tx.executeSql("SELECT * FROM mygallery",null,function(tx,results){
                 //console.log(results.rows);
             if(results.rows.length > 0){
