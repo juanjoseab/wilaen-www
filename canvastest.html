@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>TEST</title>
+        <script type="text/javascript" src="bower_components/jquery/jquery.js"></script>
+        <script type="text/javascript">
+
+
+
+        $(function(){
+            var canvas = document.createElement('canvas');
+            var canvas2 = document.createElement('canvas');
+            canvas.width  = 500;
+            canvas.height = 500;
+            var lienzo = canvas.getContext("2d");
+            var contenedor = $("#canvasBox");                    
+            contenedor.append(canvas);
+            
+            function setCanvasBG(){
+                var img = new Image();
+                img.src = "img/testpics/bosque.jpg";
+                $(img).on("load",function(){
+                    lienzo.drawImage(img,0,0,500,500);
+                });
+            }
+
+            function rotateOnCanvas(){
+                var img2 = new Image();
+
+                img2.src = "img/testpics/profile.jpg";
+                $(img2).on("load",function(){
+                    var centerX = (canvas.width/2) - (img2.height/2);
+                    var centerY = (canvas.height / 2) - (img2.width/2);
+                    var hipotenusa = (Math.sqrt( Math.pow(canvas.width,2)  +  Math.pow(canvas.height,2) ) ) / 4 ;
+                    var myImgW = img2.width;
+                    var myImgH = img2.height;
+                    lienzo.drawImage(img2, centerX, centerY ,145,145);
+                    //lienzo.drawImage(img2, ( (canvas.width/2) - 0) , ((canvas.height / 2) - 0) ,145,145);
+                    lienzo.translate(centerY  , centerY );
+                    lienzo.rotate(Math.PI/6);
+                    var txr = -(centerX - myImgW + (myImgW/8) + (myImgW/4) - (myImgW/12) );
+                    var tyr = -(centerY - myImgH + (myImgH/8) + (myImgH/4) - (myImgH/12) );
+                    lienzo.translate( - (hipotenusa) , - (hipotenusa)  );
+                    lienzo.globalAlpha = 0.5;
+                    lienzo.drawImage(img2,centerX + (myImgW/2) ,centerY + (myImgH/2),145,145);
+                })
+
+            }
+
+            $("#setBG").click(function(){
+                setCanvasBG();
+            });
+
+            $("#setImgRotated").click(function(){
+                rotateOnCanvas();
+            });
+        });
+        </script>        
+    </head>
+    <body>
+        <h1>Prueba de canvas</h1>
+        <div>
+        <button id="setBG" >Set canvas BG</button> | <button id="setImgRotated">Rotate image</button>
+    
+        </div>
+        
+
+        <div id="canvasBox" style="width:500px; height:500px; display block; border:1px #000 solid;"></div>
+
+
+    </body>
+</html>
