@@ -33,17 +33,16 @@
                     var centerX = (canvas.width/2) - (img2.height/2);
                     var centerY = (canvas.height / 2) - (img2.width/2);
                     var hipotenusa = (Math.sqrt( Math.pow(canvas.width,2)  +  Math.pow(canvas.height,2) ) ) / 4 ;
+                    var hipotenusaImg = (Math.sqrt( Math.pow(img2.width,2)  +  Math.pow(img2.height,2) ) ) / 2 ;
                     var myImgW = img2.width;
                     var myImgH = img2.height;
                     lienzo.drawImage(img2, centerX, centerY ,145,145);
                     //lienzo.drawImage(img2, ( (canvas.width/2) - 0) , ((canvas.height / 2) - 0) ,145,145);
-                    lienzo.translate(centerY  , centerY );
-                    lienzo.rotate(Math.PI/6);
-                    var txr = -(centerX - myImgW + (myImgW/8) + (myImgW/4) - (myImgW/12) );
-                    var tyr = -(centerY - myImgH + (myImgH/8) + (myImgH/4) - (myImgH/12) );
-                    lienzo.translate( - (hipotenusa) , - (hipotenusa)  );
+                    lienzo.translate(centerX , centerY );
+                    lienzo.rotate(Math.PI/4);
+                    lienzo.translate( - (hipotenusa - hipotenusaImg) , - (hipotenusa - hipotenusaImg)  );
                     lienzo.globalAlpha = 0.5;
-                    lienzo.drawImage(img2,centerX + (myImgW/2) ,centerY + (myImgH/2),145,145);
+                    lienzo.drawImage(img2,hipotenusa - (hipotenusaImg) ,hipotenusa - (hipotenusaImg),145,145);
                 })
 
             }
