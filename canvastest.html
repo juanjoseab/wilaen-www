@@ -10,7 +10,6 @@
 
         $(function(){
             var canvas = document.createElement('canvas');
-            var canvas2 = document.createElement('canvas');
             canvas.width  = 500;
             canvas.height = 500;
             var lienzo = canvas.getContext("2d");
@@ -30,22 +29,41 @@
 
                 img2.src = "img/testpics/profile.jpg";
                 $(img2).on("load",function(){
-                    var centerX = (canvas.width/2) - (img2.height/2);
-                    var centerY = (canvas.height / 2) - (img2.width/2);
-                    var hipotenusa = (Math.sqrt( Math.pow(canvas.width,2)  +  Math.pow(canvas.height,2) ) ) / 4 ;
-                    var hipotenusaImg = (Math.sqrt( Math.pow(img2.width,2)  +  Math.pow(img2.height,2) ) ) / 2 ;
+                    var centerX = (canvas.width/5) ;
+                    var centerY = (canvas.height/3);
+
                     var myImgW = img2.width;
                     var myImgH = img2.height;
-                    lienzo.drawImage(img2, centerX, centerY ,145,145);
-                    //lienzo.drawImage(img2, ( (canvas.width/2) - 0) , ((canvas.height / 2) - 0) ,145,145);
-                    lienzo.translate(centerX , centerY );
-                    lienzo.rotate(Math.PI/4);
-                    lienzo.translate( - (hipotenusa - hipotenusaImg) , - (hipotenusa - hipotenusaImg)  );
+
+                    var posX    = Math.floor((Math.random() * (canvas.width - img2.width)) + 1) ;
+                    var posY    = Math.floor((Math.random() * (canvas.height - img2.height)) + 1);
+
+                    lienzo.drawImage(img2, posX, posY );
+
+                    var imgCenterX = posX + (img2.width/2);
+                    var imgCenterY = posY + (img2.height/2);
+
+                    lienzo.translate(imgCenterX , imgCenterY );
                     lienzo.globalAlpha = 0.5;
-                    lienzo.drawImage(img2,hipotenusa - (hipotenusaImg) ,hipotenusa - (hipotenusaImg),145,145);
+                    var degrees = Math.floor((Math.random() * 360) + 1);                    
+                    $("#textGrados").text(degrees);
+                    var rotateAngle = (degrees) * (Math.PI/180)
+                    lienzo.rotate(rotateAngle);
+                    lienzo.drawImage(img2, -(img2.width/2), -(img2.height/2) );
+
+                    
+                    //lienzo.drawImage(img2,hipotenusa - (hipotenusaImg) ,hipotenusa - (hipotenusaImg));
                 })
 
             }
+
+            function resetCanvas(){
+                lienzo.clearRect(0, 0, canvas.width, canvas.height);
+            }
+
+            $("#resetCanvas").click(function(){
+                resetCanvas();
+            })
 
             $("#setBG").click(function(){
                 setCanvasBG();
@@ -60,8 +78,10 @@
     <body>
         <h1>Prueba de canvas</h1>
         <div>
-        <button id="setBG" >Set canvas BG</button> | <button id="setImgRotated">Rotate image</button>
-    
+            <button id="setBG" >Set canvas BG</button> | <button id="setImgRotated">Rotate image</button> | <button id="resetCanvas">Reset</button>
+        </div>
+        <div>
+            <b>Grados:</b> <span id="textGrados"></span>
         </div>
         
 

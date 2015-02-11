@@ -173,33 +173,35 @@ $(function(){
 
     function openAlbum() {
     
+
+
         navigator.camera.getPicture(function(imageData){
-            photoData = imageData;
-            createCanvas();
+            createCanvas(imageData);
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
             //alert(imageData);
         }, function(error){console.log(error);}, 
-            {
-                quality: 50,
+            {quality: 70,  
+                targetWidth: 500, 
+                targetHeight: 500,
                 sourceType: 0,
                 destinationType: 1,
-                correctOrientation: true
         });
         
     }
 
     function openCamera() {
+
+
         navigator.camera.getPicture(function(imageData){
-            photoData = imageData;
-            createCanvas();
+            createCanvas(imageData);
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
             //alert(imageData);
         }, function(error){console.log(error);}, 
-            {
-                quality: 50,
+            {quality: 70,  
+                targetWidth: 500, 
+                targetHeight: 500,
                 sourceType: 1,
                 destinationType: 1,
-                correctOrientation: true
         });
         
     }
