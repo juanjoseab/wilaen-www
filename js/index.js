@@ -12,7 +12,7 @@ $(function(){
     var imgObj = [];
     imgObj.angle = 0;
     var selectPic;
-    var canvas;
+    var canvas, lienzo;
     var fadeimg = 1;
     var photoData;
     var db = window.openDatabase("Database", "1.0", "dbtx", 2000000000);
@@ -137,14 +137,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        //openAlbum();
-        openAlbumTest();
+        openAlbum();
+        //openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        //openCamera();
-        openCameraTest();
+        openCamera();
+        //openCameraTest();
     });
 
 
@@ -176,32 +176,39 @@ $(function(){
 
 
         navigator.camera.getPicture(function(imageData){
-            createCanvas(imageData);
+            photoData = imageData;
+            createCanvas();
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
             //alert(imageData);
         }, function(error){console.log(error);}, 
-            {quality: 70,  
+            {
+                quality: 50,  
                 targetWidth: 500, 
                 targetHeight: 500,
                 sourceType: 0,
                 destinationType: 1,
+                correctOrientation: true
         });
         
     }
 
     function openCamera() {
-
-
+        
         navigator.camera.getPicture(function(imageData){
-            createCanvas(imageData);
+            console.log("estamos en la funcion de la camara");
+            photoData = imageData;            
+            createCanvas();
+            console.log("ya pasamos la funcion createCanvas");
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
             //alert(imageData);
         }, function(error){console.log(error);}, 
-            {quality: 70,  
+            {
+                quality: 50,  
                 targetWidth: 500, 
                 targetHeight: 500,
                 sourceType: 1,
                 destinationType: 1,
+                correctOrientation: true
         });
         
     }
@@ -223,29 +230,29 @@ $(function(){
     //dataURL = canvas.toDataURL();
 
     function createCanvas(){
+        console.log("entramos a la funcion createCanvas");
         var photo = new Image();
-        photo.src = photoData; 
-        $("#canvasContent canvas").remove();
+        photo.src = photoData;
+        console.log(photoData);
+        console.log("ya asignamos el src");
+        $("#canvasContent *").remove();
         $(photo).on("load",function(){
-
+            console.log("estamos en el momento de ONLOAD de la imagen");
             var imgW;
             var imgH;
-
             if(photo.width > photo.height){
                 imgW = $(window).width();
                 imgH = Math.round($(window).width() * photo.height/photo.width);
             }else if(photo.width < photo.height){                
                 imgH = $(window).height();
                 imgW = Math.round($(window).height() * photo.width/photo.height);
-            }else {
-                alert("es cuadrada");
-            }            
+            }           
             $("#canvasContent").height( imgH  + "px");
             canvas = document.createElement('canvas');
             canvas.width = imgW;
             canvas.height = imgH;
             $("#canvasContent").append(canvas);
-            var lienzo = canvas.getContext("2d");
+            lienzo = canvas.getContext("2d");
             lienzo.drawImage(photo,0,0,imgW,imgH);
         })
     }
@@ -368,18 +375,17 @@ $(function(){
             });
             it.appendTo('#canvasOverLayer');
             resizable.appendTo('#draggable-test');
-            creepyimgItem.appendTo("#resizable-item");            
-            
-
-            
+            creepyimgItem.appendTo("#resizable-item"); 
+            $.mobile.changePage( "#create", { transition: "slide", changeHash: false });
         }
-        $.mobile.changePage( "#create", { transition: "slide", changeHash: false });
+        
     }
     
 
     $("#guardarImg").click(function(){
         if(confirm('\u00BFRealmente deseas guardar esta imagen en tu CreepyAlbum?')){
             guarderImagen();    
+            
         }else{
             return false;
         }
@@ -397,6 +403,8 @@ $(function(){
     $("#cancelimg").click(function(){
         if(confirm('\u00BFRealmente eliminar esta imagen?')){
             cancelarImagen();    
+            resizes();
+            clearCanvasSpace();
         }else{
             return false;
         };
@@ -408,13 +416,30 @@ $(function(){
         imagen.src = imgObj.url;
         var lienzo = canvas.getContext("2d");
         $(imagen).on("load",function(){            
+
+            //Obtengo el ancho y alto de la imagen
             var imgW = $("img#myCreepyThumbimgId").width();
-            var imgH = $("img#myCreepyThumbimgId").height();;
+            var imgH = $("img#myCreepyThumbimgId").height();
+
+            // obtengo las coordenadas del centro de la imagen
+            var imgCenterX = imgObj.left + (imgW/2);
+            var imgCenterY = imgObj.top + (imgH/2);            
             //console.log(imgH + " - " + imgW);
             lienzo.globalAlpha = fadeimg;
-            imgangle = Math.round(imgObj.angle * 100) / 100 ;            
+            //traslado el eje al centro de la imagen
+            lienzo.translate(imgCenterX , imgCenterY );
+
+            //Defino el angulo de giro, convirtiendo los grados que devuelve el plugin a radianes
+            imgangle =  (imgObj.angle) * (Math.PI/180);
+
+            //Roto el lienzo en base al angulo
             lienzo.rotate(imgangle);
-            lienzo.drawImage(imagen,imgObj.left,imgObj.top,imgW,imgH);
+
+            //dibujo la imagen en torno a la esquina superior izquierda, 
+            //pero le resto la mitad del ancho de la imagen y la mitad del alto 
+            //para que mantener su centro.
+            lienzo.drawImage(imagen, -(imgW/2), -(imgH/2), imgW,imgH );
+            //lienzo.drawImage(imagen,imgObj.left,imgObj.top,imgW,imgH);
             //console.log(lienzo);
             $("img#myCreepyThumbimgId").remove();
             var imgData = canvas.toDataURL();
@@ -429,13 +454,16 @@ $(function(){
                 return true;
             });
             prepareMyCreepyGallery();
+            resizes();
+            clearCanvasSpace();
             $("#canvasContent canvas").remove();
             $("#draggable-test").remove();
         });
     }
 
     function cancelarImagen(){
-        $("#canvasContent canvas").remove();
+        clearCanvasSpace()
+        $("#canvasContent *").remove();
         $("#draggable-test").remove();
         $.mobile.changePage( "#home", { transition: "slide", changeHash: false });
     }
@@ -444,6 +472,11 @@ $(function(){
         window.plugins.socialsharing.share(null, 'Android filename', selectPic, null);
     });
 
+    function clearCanvasSpace(){
+        photoData= null;
+        canvas = null;
+        selectPic = null;
+    }
     
 
     $("#gotoMyCreepyGallery, .gotoMyCreepyGallery").click(function(){
@@ -452,6 +485,8 @@ $(function(){
     
 
     function prepareMyCreepyGallery (){
+        resizes();
+        clearCanvasSpace();
         $("#MyCreepyGalleryContent *").remove();
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM mygallery",null,function(tx,results){
