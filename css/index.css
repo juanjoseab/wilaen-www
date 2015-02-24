@@ -316,6 +316,7 @@ div.ui-block-b.creepy-galleryitem span {
 	z-index: 99999999999999999;
 	position: absolute;
 	bottom: 0;
+	overflow: hidden;
 }
 
 .wrap_controls div {
@@ -342,4 +343,8 @@ div.ui-block-b.creepy-galleryitem span {
 
 #canvas_controls img:hover {
 	opacity: 1;
+}
+
+body.ui-mobile-viewport.ui-overlay-a div#create.ui-page.ui-page-theme-a.ui-page-active {
+	background: #ffffff !important;
 }

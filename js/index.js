@@ -75,21 +75,37 @@ $(function(){
         var windowHeight = $(window).height();
         var windowWidth = $(window).width();
         var canvasFooter = $("#canvasFooter");
+        var ctrlBtnW = $(".wrap_controls div img").width();
         $("#lienzo").width('100%').height( (windowHeight - 5)  + "px");
-        $("#canvas_controls").height( (windowHeight - $("#canvasFooter").height())  + "px");
+        //$("#canvas_controls").height( (windowHeight - $("#canvasFooter").height())  + "px");
         //$("body").height(device.height);
         //Le doy la altura al titulo principal
         $("#home .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
         $("#nuevacreepy .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
         //$('.creepyfooter').css('bottom',windowHeight - 120 + "px");
         $('.creepyfooter').css('bottom',0);
+        //$(".wrap_controls div").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css("margin-left", ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important");
+        //console.log($(window).orientation);
+
 
     }
 
     setInterval(function(){
         var windowHeight = $(window).height();
+        var windowWidth = $(window).width();
         var ctrlBtnW = $(".wrap_controls div img").width();
-        $(".wrap_controls div").css ("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css("margin-left",ctrlBtnW + "px !important");
+        $("#nuevacreepy .home_center_container").css('top', (windowHeight/3) - $(".home_center_container").height() + 'px');
+        $("#home .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
+        if(window.innerHeight > window.innerWidth){
+            var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
+            //console.log(boxW);
+            $(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
+            
+        }else{
+            $(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
+            $(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
+        }
+        
     },500);
 
     resizes();
@@ -172,33 +188,29 @@ $(function(){
     });
 
     function openAlbum() {
-    
-
-
+        console.log("abriendo album X");
         navigator.camera.getPicture(function(imageData){
+            console.info(imageData);
+            console.log("supuestamente entramos en la foto");
             photoData = imageData;
             createCanvas();
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
-            //alert(imageData);
-        }, function(error){console.log(error);}, 
-            {
-                quality: 50,  
-                targetWidth: 500, 
-                targetHeight: 500,
-                sourceType: 0,
-                destinationType: 1,
-                correctOrientation: true
+            alert(imageData);
+        }, function(error){
+            console.log("ERROR EN EL ALBUM : " + error);
+        }, 
+        {
+            quality: 50,
+            sourceType: 0,
+            destinationType: 1
         });
         
     }
 
-    function openCamera() {
-        
+    function openCamera() {        
         navigator.camera.getPicture(function(imageData){
-            console.log("estamos en la funcion de la camara");
-            photoData = imageData;            
-            createCanvas();
-            console.log("ya pasamos la funcion createCanvas");
+            photoData = imageData;
+            createCanvas();            
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
             //alert(imageData);
         }, function(error){console.log(error);}, 
@@ -254,7 +266,7 @@ $(function(){
             $("#canvasContent").append(canvas);
             lienzo = canvas.getContext("2d");
             lienzo.drawImage(photo,0,0,imgW,imgH);
-        })
+        });
     }
 
 

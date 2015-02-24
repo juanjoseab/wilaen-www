@@ -76,3 +76,29 @@
 	}
 
 }
+
+
+@media (orientation: landscape) { 
+
+		div#wrap_controls.wrap_controls {
+			position: absolute !important;
+			top: 0 !important;
+			right: 0 !important;
+			width: 15%;
+			overflow: hidden;
+		}
+
+		div#wrap_controls.wrap_controls div {
+			width: 100%;
+			overflow: hidden;
+			padding: 0 5px;
+		}
+
+		div#wrap_controls.wrap_controls div img{
+			/*width: 100%;*/
+			margin: 5px 0;
+			overflow: hidden;
+			display: block;
+			float: left;
+		}
+}
