@@ -81,7 +81,7 @@ $(function(){
         //$("body").height(device.height);
         //Le doy la altura al titulo principal
         $("#home .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
-        $("#nuevacreepy .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
+        $("#nuevacreepy .home_center_container").css('top', (windowHeight/3) - $(".home_center_container").height() + 'px');
         //$('.creepyfooter').css('bottom',windowHeight - 120 + "px");
         $('.creepyfooter').css('bottom',0);
         //$(".wrap_controls div").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css("margin-left", ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important");
@@ -96,7 +96,7 @@ $(function(){
         var ctrlBtnW = $(".wrap_controls div img").width();
         $("#nuevacreepy .home_center_container").css('top', (windowHeight/3) - $(".home_center_container").height() + 'px');
         $("#home .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
-        if(window.innerHeight > window.innerWidth){
+        /*if(window.innerHeight > window.innerWidth){
             var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
             //console.log(boxW);
             $(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
@@ -104,7 +104,7 @@ $(function(){
         }else{
             $(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
             $(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
-        }
+        }*/
         
     },500);
 
@@ -153,14 +153,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        openAlbum();
-        //openAlbumTest();
+        //openAlbum();
+        openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        openCamera();
-        //openCameraTest();
+        //openCamera();
+        openCameraTest();
     });
 
 
