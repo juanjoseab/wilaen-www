@@ -317,20 +317,23 @@ div.ui-block-b.creepy-galleryitem span {
 	position: absolute;
 	bottom: 0;
 	overflow: hidden;
+	width: 100%;
+	height: 12%;
 }
 
 .wrap_controls div {
-	overflow: hidden;
-	/*margin: 0 auto !important;*/
+	/*overflow: hidden;*/
+	margin: 0 auto !important;
+	height: 100%;
+	display: block;
 }
 
 .wrap_controls img {
 	width: auto;
-	height: 100%;
+	height: 80%;
 	float: left;
 	margin: 0;
 	padding:0;
-
 }
 
 

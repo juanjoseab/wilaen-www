@@ -94,17 +94,20 @@ $(function(){
         var windowHeight = $(window).height();
         var windowWidth = $(window).width();
         var ctrlBtnW = $(".wrap_controls div img").width();
-        $("#nuevacreepy .home_center_container").css('top', (windowHeight/3) - $(".home_center_container").height() + 'px');
+        $("#nuevacreepy .home_center_container").css('top', (windowHeight/5) - $(".home_center_container").height() + 'px');
         $("#home .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
-        /*if(window.innerHeight > window.innerWidth){
-            var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
+        if(window.innerHeight > window.innerWidth){
+            //var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
             //console.log(boxW);
-            $(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
-            
+            //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
+            $("#controlButtonBox").width(ctrlBtnW*5);
+            console.log(ctrlBtnW*5);
         }else{
-            $(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
-            $(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
-        }*/
+            $("#controlButtonBox").width("100%");
+            //$(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
+            //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
+
+        }
         
     },500);
 
@@ -153,14 +156,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        //openAlbum();
-        openAlbumTest();
+        openAlbum();
+        //openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        //openCamera();
-        openCameraTest();
+        openCamera();
+        //openCameraTest();
     });
 
 
@@ -195,7 +198,6 @@ $(function(){
             photoData = imageData;
             createCanvas();
             $.mobile.changePage( "#create", { transition: "flip", changeHash: false });
-            alert(imageData);
         }, function(error){
             console.log("ERROR EN EL ALBUM : " + error);
         }, 
@@ -252,20 +254,112 @@ $(function(){
             console.log("estamos en el momento de ONLOAD de la imagen");
             var imgW;
             var imgH;
-            if(photo.width > photo.height){
-                imgW = $(window).width();
-                imgH = Math.round($(window).width() * photo.height/photo.width);
-            }else if(photo.width < photo.height){                
-                imgH = $(window).height();
-                imgW = Math.round($(window).height() * photo.width/photo.height);
-            }           
+            console.log("w: " + photo.width +" - h: " + photo.height);
             $("#canvasContent").height( imgH  + "px");
+            $("canvas").remove();
             canvas = document.createElement('canvas');
-            canvas.width = imgW;
-            canvas.height = imgH;
-            $("#canvasContent").append(canvas);
-            lienzo = canvas.getContext("2d");
-            lienzo.drawImage(photo,0,0,imgW,imgH);
+            
+
+            // obtengo las coordenadas del centro de la imagen
+            var imgCenterY;            
+            var imgCenterX;
+            //traslado el eje al centro de la imagen
+
+            if(window.innerHeight > window.innerWidth){
+                if(photo.width > photo.height){                    
+                    imgW = $(window).width();
+                    imgH = Math.round($(window).innerWidth() * photo.width/photo.height);
+
+                    console.log("pw: " + imgW.width +" - ph: " + imgH.height);
+                    imgCenterY = (imgH/2);            
+                    imgCenterX = (imgW/2);
+                    
+
+                    canvas.width = imgW;
+                    canvas.height = imgH;
+                    $("#canvasContent").append(canvas);
+                    lienzo = canvas.getContext("2d");
+                    lienzo.translate(imgCenterX , imgCenterY );
+
+                    //Defino el angulo de giro, convirtiendo los grados que devuelve el plugin a radianes
+                    imgangle =  (90) * (Math.PI/180);
+
+                    //Roto el lienzo en base al angulo
+                    lienzo.rotate(imgangle);
+
+                    //dibujo la imagen en torno a la esquina superior izquierda, 
+                    //pero le resto la mitad del ancho de la imagen y la mitad del alto 
+                    //para que mantener su centro.
+                    lienzo.drawImage(photo, -(imgH/2), -(imgW/2), imgH,imgW );
+                    lienzo.rotate(-imgangle);
+                    lienzo.translate(-imgCenterX , -imgCenterY );
+
+                }else if(photo.width < photo.height){
+                    imgW = $(window).width();
+                    imgH = Math.round($(window).height() * photo.width/photo.height);
+                    canvas.width = imgW;
+                    canvas.height = imgH;
+                    $("#canvasContent").append(canvas);
+                    lienzo = canvas.getContext("2d");
+                    lienzo.drawImage(photo,0,0,imgW,imgH);
+
+                }           
+                
+                //var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
+                //console.log(boxW);
+                //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
+                
+                console.log('asdf')
+
+            }else{
+                
+                if(photo.width > photo.height){                    
+                    imgH = $(window).height();
+                    imgW = Math.round($(window).width() * photo.height/photo.width);
+                    canvas.width = imgW;
+                    canvas.height = imgH;
+                    $("#canvasContent").append(canvas);
+                    lienzo = canvas.getContext("2d");
+                    lienzo.drawImage(photo,0,0,imgW,imgH);
+                }else if(photo.width < photo.height){
+
+                    imgH = $(window).innerHeight();
+                    imgW = Math.round($(window).innerWidth() * photo.width/photo.height);
+
+                    console.log("pw: " + imgW.width +" - ph: " + imgH.height);
+                    imgCenterY = (imgH/2);            
+                    imgCenterX = (imgW/2);
+                    
+
+                    canvas.width = imgW;
+                    canvas.height = imgH;
+                    $("#canvasContent").append(canvas);
+                    lienzo = canvas.getContext("2d");
+                    lienzo.translate(imgCenterX , imgCenterY );
+
+                    //Defino el angulo de giro, convirtiendo los grados que devuelve el plugin a radianes
+                    imgangle =  (-90) * (Math.PI/180);
+
+                    //Roto el lienzo en base al angulo
+                    lienzo.rotate(imgangle);
+
+                    //dibujo la imagen en torno a la esquina superior izquierda, 
+                    //pero le resto la mitad del ancho de la imagen y la mitad del alto 
+                    //para que mantener su centro.
+                    lienzo.drawImage(photo, -(imgH/2), -(imgW/2), imgH,imgW );
+                    lienzo.rotate(-imgangle);
+                    lienzo.translate(-imgCenterX , -imgCenterY );
+                }
+
+                
+
+
+                //$(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
+                //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
+
+            }
+            
+            //lienzo.drawImage(photo,0,0,imgW,imgH);
         });
     }
 

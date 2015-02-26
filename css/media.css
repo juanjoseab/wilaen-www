@@ -84,8 +84,9 @@
 			position: absolute !important;
 			top: 0 !important;
 			right: 0 !important;
-			width: 15%;
+			width: 10%;
 			overflow: hidden;
+			height: 100%;
 		}
 
 		div#wrap_controls.wrap_controls div {
@@ -95,10 +96,10 @@
 		}
 
 		div#wrap_controls.wrap_controls div img{
-			/*width: 100%;*/
-			margin: 5px 0;
+			width: 85%;
+			height: auto;
+			margin: 2% auto !important;
 			overflow: hidden;
 			display: block;
-			float: left;
 		}
 }
