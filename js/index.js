@@ -16,6 +16,8 @@ $(function(){
     var fadeimg = 1;
     var photoData;
     var db = window.openDatabase("Database", "1.0", "dbtx", 2000000000);
+    var banner = {};
+    banner.set = false;
 
     function checkDb(){
         db.transaction(function(tx){
@@ -23,6 +25,7 @@ $(function(){
             //console.log(results);
             if(results.rows.length > 0) {
                 //console.log("tengo rows");
+                getBanners();
             }else{
                 //console.log("no tengo rows");
                 db.transaction(function(tr){
@@ -30,7 +33,7 @@ $(function(){
                     tr.executeSql('CREATE TABLE IF NOT EXISTS mygallery (id INTEGER PRIMARY KEY, uri);');
                     
                     tr.executeSql('CREATE TABLE IF NOT EXISTS banner (id INTEGER PRIMARY KEY, low,medium,high,href);');
-                    tr.executeSql('INSERT INTO banner (low,medium,high,href) VALUES ("img/banners/low.jpg", "img/banners/medium.jpg","img/banners/high.jpg","http://facebook.com");');
+                    tr.executeSql('INSERT INTO banner (low,medium,high,href) VALUES ("img/banners/low.jpg", "img/banners/medium.jpg","img/banners/high.jpg","http://rafael.servehttp.com/paranormal/");');
 
                     tr.executeSql('CREATE TABLE IF NOT EXISTS img (id INTEGER PRIMARY KEY, name, uri);');
                     tr.executeSql('INSERT INTO img (name, uri) VALUES ("Ovni", "img/pics/ovni.png");');
@@ -48,6 +51,7 @@ $(function(){
                     return false;
                 }, function(tr){
                     console.log(tr);
+                    getBanners();
                     return true;
                 });
                 
@@ -105,15 +109,41 @@ $(function(){
             //console.log(boxW);
             //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
             $("#controlButtonBox").width(ctrlBtnW*5);
-            console.log(ctrlBtnW*5);
+            
         }else{
             $("#controlButtonBox").width("100%");
             //$(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
             //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
 
         }
+        var bannerFlag = banner.set;
+        console.log(window.innerWidth)
+        if(window.innerWidth <= 500){
+            banner.set = banner.low;
+        }
+        if(window.innerWidth > 500 && window.innerWidth <= 900 ){
+            banner.set = banner.medium;
+        }
+        if(window.innerWidth > 900){
+            banner.set = banner.high;
+        }
+
+        if(bannerFlag != banner.set){
+
+            $("#header img").remove();
+            $("#header").append('<a class="LinkCreppyBanner" target="_system" data-href="' + banner.href + '"><img src="' + banner.set + '" class="creppyBanner" /></a>');
+            bannerFlag = banner.set;
+        }
+
+
+
         
     },500);
+    $('body').on('click','.LinkCreppyBanner',function(){
+        var bannerhref = $(this).attr('data-href');
+        window.open(bannerhref, '_system');
+    })
+    
 
     resizes();
     $(window).resize(function(){
@@ -154,6 +184,32 @@ $(function(){
         }
 
     }, false);
+
+
+    function getBanners(){
+        db.transaction(function(tx){
+            tx.executeSql("SELECT * FROM banner",null,function(tx,results){
+                //console.log(results.rows);
+            if(results.rows.length > 0){
+                                    
+                    var item = results.rows.item(results.rows.length - 1);
+                    banner.low = item.low;
+                    banner.medium = item.medium;
+                    banner.high = item.high;
+                    banner.href = item.href;
+                    
+            }
+
+            console.log(banner);
+        });
+        },
+        function(err){
+            alert(err.message);
+        },
+        function(){
+
+        });
+    }
 
 
 
