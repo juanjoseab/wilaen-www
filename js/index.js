@@ -12,6 +12,7 @@ $(function(){
     var imgObj = [];
     imgObj.angle = 0;
     var selectPic;
+    var selectPicId;
     var canvas, lienzo;
     var fadeimg = 1;
     var photoData;
@@ -117,7 +118,7 @@ $(function(){
 
         }
         var bannerFlag = banner.set;
-        console.log(window.innerWidth)
+        //console.log(window.innerWidth)
         if(window.innerWidth <= 500){
             banner.set = banner.low;
         }
@@ -200,7 +201,7 @@ $(function(){
                     
             }
 
-            console.log(banner);
+            //console.log(banner);
         });
         },
         function(err){
@@ -216,14 +217,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        openAlbum();
-        //openAlbumTest();
+        //openAlbum();
+        openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        openCamera();
-        //openCameraTest();
+        //openCamera();
+        openCameraTest();
     });
 
 
@@ -635,13 +636,14 @@ $(function(){
     }
 
     $(".sharepic").click(function(){
-        window.plugins.socialsharing.share(null, 'Android filename', selectPic, null);
+        window.plugins.socialsharing.share(null, 'Mi CreePic', selectPic, null);
     });
 
     function clearCanvasSpace(){
         photoData= null;
         canvas = null;
         selectPic = null;
+        selectPicId = null;
     }
     
 
@@ -660,14 +662,16 @@ $(function(){
             if(results.rows.length > 0){
                 for (var i = results.rows.length - 1; i >= 0; i--) {                    
                     var item = results.rows.item(i);
-                    $('<div  img-src="'+item.uri+'" class="gallery-item-box"><img src="'+item.uri+'" class="mygalleryimg" /></div>').appendTo("#MyCreepyGalleryContent");
+                    $('<div img-id="'+item.id+'" img-src="'+item.uri+'" class="gallery-item-box"><img src="'+item.uri+'" class="mygalleryimg" /></div>').appendTo("#MyCreepyGalleryContent");
+                    
                 };
                 //iraCreepyGallery();
                 $('.gallery-item-box').height($(window).width()/3);
                 $.mobile.changePage("#mycreepygallery", { transition: "flip", changeHash: false });
             }else{
 
-                alert('A\u00fan no tienes fotos en tu CreepyAlbum')
+                alert('A\u00fan no tienes fotos en tu CreepyAlbum');
+                $.mobile.changePage("#home", { transition: "flip", changeHash: false });
                 
             }
         });
@@ -681,14 +685,74 @@ $(function(){
     }    
 
     $('body').on('click','.gallery-item-box',function(){
-        var img_src = $(this).attr('img-src');
+        var img_src =   $(this).attr('img-src');
+        var img_id =    $(this).attr('img-id');
         $('#creepyImgBox img').remove();
         $('#creepyImgBox').append('<img src="'+img_src+'" />');
         selectPic = img_src;
+        selectPicId = img_id;
+        console.log(selectPicId);
         $.mobile.changePage("#mycreepyimage", { transition: "flip", changeHash: false });
     });
 
+
+    function deleteMyCreePicImg(imgId) {
+        if(confirm('\u00BFRealmente deseas borrar esta imagen en tu CreepyAlbum?')){
+
+            db.transaction(function(tx){
+                tx.executeSql("DELETE FROM mygallery WHERE id = '" + imgId + "'",null,function(tx){
+                alert("Esta CreePic fue eliminada!")
+            });
+            },
+            function(err){
+                alert(err.message);
+            },
+            function(){
+
+            });
+            prepareMyCreepyGallery();
+            }
+        }
+
+
+    $("body").on('click',".deleteMyCreepic",function(){
+        deleteMyCreePicImg(selectPicId);
+    })
+
     // Window load event used just in case window height is dependant upon images
+
+    $(".bajacoso").click(function(){
+        downloadFile();        
+    });
+
+    function downloadFile(){
+
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, 
+            function (fileSystem) {
+                fileSystem.root.getFile(
+                "dummy.html", {create: true, exclusive: false}, 
+                function gotFileEntry(fileEntry) {
+                    var sPath = fileEntry.fullPath.replace("dummy.html","");
+                    var fileTransfer = new FileTransfer();
+                    fileEntry.remove();
+
+                    fileTransfer.download(
+                        "http://www.w3.org/2011/web-apps-ws/papers/Nitobi.pdf",
+                        sPath + "theFile.pdf",
+                        function(theFile) {
+                            console.log("download complete: " + theFile.toURI());
+                            showLink(theFile.toURI());
+                        },
+                        function(error) {
+                            console.log("download error source " + error.source);
+                            console.log("download error target " + error.target);
+                            console.log("upload error code: " + error.code);
+                        }
+                    );
+                }, function(){});
+            }, function(){});
+    };
+
 
 
 
