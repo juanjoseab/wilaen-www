@@ -463,8 +463,8 @@ $(function(){
                 var creepyimgItem = $('<div><img src="'+imgObj.url +'" id="myCreepyThumbimgId"  /></div>').rotatable(params);
                 var resizable = $('<div class="resizable-item" id="resizable-item" style="height:'+myCHeight+'px; width:'+myCWidth+'px" > </div>').resizable({
                     aspectRatio: true,
-                    handles: 'ne, se, sw, nw'
-                    //handles: 'se'
+                    //handles: 'ne, se, sw, nw'
+                    handles: 'se'
                 });
                 var it = $('<div class="draggable-test" id="draggable-test"  />');
                 it.draggable({ 
