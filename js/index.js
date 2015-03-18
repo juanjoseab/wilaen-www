@@ -456,6 +456,19 @@ $(function(){
     });
 
     $("#openCreepyAlbum").click(function(){
+        
+        openCreepyImgGallery();
+
+    });
+    openCreepyImgGallery();
+    $( "body" ).on( "pagechange", function( event,ui ) {
+            if(ui.toPage[0].id == "creepygallery"){
+                var w = $('div.ui-block-b.creepy-galleryitem').width();
+                $('div.ui-block-b.creepy-galleryitem').height(w);
+            }
+    } );
+
+    function openCreepyImgGallery(){
         $("#CreepyGalleryContent div").remove();
         db.transaction(function(tx){
             tx.executeSql("SELECT * FROM img",null,function(tx,results){
@@ -477,9 +490,7 @@ $(function(){
         function(){
 
         });
-        //ui-grid-b
-
-    });
+    }
 
     $("body").on('click','.creepy-galleryitem',function(){
         var t = $(this);

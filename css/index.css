@@ -267,10 +267,11 @@ canvas {
 
 div.ui-block-b.creepy-galleryitem, .mygalleryitem {
 	min-height: 100px;
-	background-size: 100%  auto !important;
+	background-size: auto  100% !important;
 	background-repeat: no-repeat;
 	background-position: center center;
 	position: relative;
+
 }
 .gallery-item-box {
 	width: 30%;
