@@ -1,9 +1,9 @@
-/*$( document ).bind( "mobileinit", function() {
+$( document ).bind( "mobileinit", function() {
     // Make your jQuery Mobile framework configuration changes here!
 
     $.mobile.allowCrossDomainPages = true;
 });
-*/
+
 
 $(function(){
     FastClick.attach(document.body);
@@ -105,6 +105,9 @@ $(function(){
         var ctrlBtnW = $(".wrap_controls div img").width();
         $("#nuevacreepy .home_center_container").css('top', (windowHeight/5) - $(".home_center_container").height() + 'px');
         $("#home .home_center_container").css('top', (windowHeight/2) - $(".home_center_container").height() + 'px');
+        if(screen.orientation=="landscape"){
+                $("#controlButtonBox").css("padding-top", ( ($(window).windowHeight - (ctrlBtnW*5))/2 ) + "px" );
+        }
         if(window.innerHeight > window.innerWidth){
             //var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
             //console.log(boxW);
@@ -113,6 +116,7 @@ $(function(){
             
         }else{
             $("#controlButtonBox").width("100%");
+            
             //$(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
             //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
 
@@ -217,14 +221,14 @@ $(function(){
 
     $('#openAlbum').click(function(){
         console.info('se disparo openAlbum');
-        //openAlbum();
-        openAlbumTest();
+        openAlbum();
+        //openAlbumTest();
     });
 
     $('#openCamera').click(function(){
         console.info('se disparo openAlbum');
-        //openCamera();
-        openCameraTest();
+        openCamera();
+        //openCameraTest();
     });
 
 
@@ -305,122 +309,37 @@ $(function(){
     //dataURL = canvas.toDataURL();
 
     function createCanvas(){
-        console.log("entramos a la funcion createCanvas");
         var photo = new Image();
         photo.src = photoData;
-        console.log(photoData);
-        console.log("ya asignamos el src");
         $("#canvasContent *").remove();
         $(photo).on("load",function(){
             console.log("estamos en el momento de ONLOAD de la imagen");
             var imgW;
             var imgH;
             console.log("w: " + photo.width +" - h: " + photo.height);
-            $("#canvasContent").height( imgH  + "px");
+
+            if(photo.width > photo.height){                
+                screen.lockOrientation('landscape');
+            }else{
+                screen.lockOrientation('portrait');
+            }
+
+            var newwidth = $(window).innerHeight() / (photo.height / photo.width);
+            var newheight = (photo.height / photo.width) * newwidth
+
+            if(newwidth > $(window).innerWidth()) {
+                newheight = (photo.height / photo.width) * $(window).innerWidth()
+                newwidth = newheight / (photo.height / photo.width);
+            }
+            $("#canvasContent").height( newheight  + "px").css('margin-top',( ($(window).innerHeight()-newheight )/2) + "px" );
             $("canvas").remove();
             canvas = document.createElement('canvas');
+            canvas.width = newwidth;
+            canvas.height = newheight;
+            $("#canvasContent").append(canvas);
+            lienzo = canvas.getContext("2d");
+            lienzo.drawImage(photo,0,0,newwidth,newheight);
             
-
-            // obtengo las coordenadas del centro de la imagen
-            var imgCenterY;            
-            var imgCenterX;
-            //traslado el eje al centro de la imagen
-
-            if(window.innerHeight > window.innerWidth){
-                if(photo.width > photo.height){                    
-                    imgW = $(window).width();
-                    imgH = Math.round($(window).innerWidth() * photo.width/photo.height);
-
-                    console.log("pw: " + imgW.width +" - ph: " + imgH.height);
-                    imgCenterY = (imgH/2);            
-                    imgCenterX = (imgW/2);
-                    
-
-                    canvas.width = imgW;
-                    canvas.height = imgH;
-                    $("#canvasContent").append(canvas);
-                    lienzo = canvas.getContext("2d");
-                    lienzo.translate(imgCenterX , imgCenterY );
-
-                    //Defino el angulo de giro, convirtiendo los grados que devuelve el plugin a radianes
-                    imgangle =  (90) * (Math.PI/180);
-
-                    //Roto el lienzo en base al angulo
-                    lienzo.rotate(imgangle);
-
-                    //dibujo la imagen en torno a la esquina superior izquierda, 
-                    //pero le resto la mitad del ancho de la imagen y la mitad del alto 
-                    //para que mantener su centro.
-                    lienzo.drawImage(photo, -(imgH/2), -(imgW/2), imgH,imgW );
-                    lienzo.rotate(-imgangle);
-                    lienzo.translate(-imgCenterX , -imgCenterY );
-
-                }else if(photo.width < photo.height){
-                    imgW = $(window).width();
-                    imgH = Math.round($(window).height() * photo.width/photo.height);
-                    canvas.width = imgW;
-                    canvas.height = imgH;
-                    $("#canvasContent").append(canvas);
-                    lienzo = canvas.getContext("2d");
-                    lienzo.drawImage(photo,0,0,imgW,imgH);
-
-                }           
-                
-                //var boxW = ((windowWidth - (ctrlBtnW * 5) ) /2);
-                //console.log(boxW);
-                //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight/5 + "px !important").width(ctrlBtnW * 5).css({"margin-left": ((windowWidth - (ctrlBtnW * 5) ) /2)  + "px !important"});
-                
-                console.log('asdf')
-
-            }else{
-                
-                if(photo.width > photo.height){                    
-                    imgH = $(window).height();
-                    imgW = Math.round($(window).width() * photo.height/photo.width);
-                    canvas.width = imgW;
-                    canvas.height = imgH;
-                    $("#canvasContent").append(canvas);
-                    lienzo = canvas.getContext("2d");
-                    lienzo.drawImage(photo,0,0,imgW,imgH);
-                }else if(photo.width < photo.height){
-
-                    imgH = $(window).innerHeight();
-                    imgW = Math.round($(window).innerWidth() * photo.width/photo.height);
-
-                    console.log("pw: " + imgW.width +" - ph: " + imgH.height);
-                    imgCenterY = (imgH/2);            
-                    imgCenterX = (imgW/2);
-                    
-
-                    canvas.width = imgW;
-                    canvas.height = imgH;
-                    $("#canvasContent").append(canvas);
-                    lienzo = canvas.getContext("2d");
-                    lienzo.translate(imgCenterX , imgCenterY );
-
-                    //Defino el angulo de giro, convirtiendo los grados que devuelve el plugin a radianes
-                    imgangle =  (-90) * (Math.PI/180);
-
-                    //Roto el lienzo en base al angulo
-                    lienzo.rotate(imgangle);
-
-                    //dibujo la imagen en torno a la esquina superior izquierda, 
-                    //pero le resto la mitad del ancho de la imagen y la mitad del alto 
-                    //para que mantener su centro.
-                    lienzo.drawImage(photo, -(imgH/2), -(imgW/2), imgH,imgW );
-                    lienzo.rotate(-imgangle);
-                    lienzo.translate(-imgCenterX , -imgCenterY );
-                }
-
-                
-
-
-                //$(".wrap_controls").css("height" , windowHeight + "px !important").width(windowWidth / 10);
-                //$(".wrap_controls div#controlButtonBox").css("height" , windowHeight + "px !important").width("100%");
-
-            }
-            
-            //lienzo.drawImage(photo,0,0,imgW,imgH);
         });
     }
 
@@ -460,7 +379,7 @@ $(function(){
         openCreepyImgGallery();
 
     });
-    openCreepyImgGallery();
+    //openCreepyImgGallery();
     $( "body" ).on( "pagechange", function( event,ui ) {
             if(ui.toPage[0].id == "creepygallery"){
                 var w = $('div.ui-block-b.creepy-galleryitem').width();
@@ -474,6 +393,7 @@ $(function(){
             tx.executeSql("SELECT * FROM img",null,function(tx,results){
                 //console.log(results.rows);
             if(results.rows.length > 0){
+
                 for (var i = results.rows.length - 1; i >= 0; i--) {                    
                     var item = results.rows.item(i);
                     $('<div class="ui-block-b creepy-galleryitem" bg-rel="'+item.uri+'" id-rel="'+item.id+'" style="background-image:url('+item.uri+') !important;"><span>'+item.name+'</span></div>').appendTo("#CreepyGalleryContent");
@@ -532,29 +452,40 @@ $(function(){
                     //console.log(imgObj.angle);
                 },
             };      
+            
+            var imagen = new Image();
+            imagen.src = imgObj.url;
+            var myCHeight = $(window).height() / 3; 
+            var myCWidth;
+            $(imagen).on("load",function(){ 
+                myCHeight = $(window).height() / 3; 
+                myCWidth = myCHeight / (imagen.height / imagen.width);
+                var creepyimgItem = $('<div><img src="'+imgObj.url +'" id="myCreepyThumbimgId"  /></div>').rotatable(params);
+                var resizable = $('<div class="resizable-item" id="resizable-item" style="height:'+myCHeight+'px; width:'+myCWidth+'px" > </div>').resizable({
+                    aspectRatio: true,
+                    handles: 'ne, se, sw, nw'
+                    //handles: 'se'
+                });
+                var it = $('<div class="draggable-test" id="draggable-test"  />');
+                it.draggable({ 
+                    containment: $("#canvasContent"),
+                    scroll: false,
+                    stop: function( event, ui ) {
+                        var Stoppos = $(this).position();                    
+                        imgObj.left = Stoppos.left;
+                        imgObj.top = Stoppos.top;
+                        //console.log(imgObj); 
+                        
+                    }
+                });
+                it.appendTo('#canvasOverLayer');
+                resizable.appendTo('#draggable-test');
+                creepyimgItem.appendTo("#resizable-item"); 
+                $.mobile.changePage( "#create", { transition: "slide", changeHash: false });
+            });
+            
 
-            var creepyimgItem = $('<div><img src="'+imgObj.url +'" id="myCreepyThumbimgId" /></div>').rotatable(params);
-            var resizable = $('<div class="resizable-item" id="resizable-item" > </div>').resizable({
-                aspectRatio: true,
-                //handles: 'ne, se, sw, nw'
-                handles: 'se'
-            });
-            var it = $('<div class="draggable-test" id="draggable-test" />');
-            it.draggable({ 
-                containment: $("#canvasContent"),
-                scroll: false,
-                stop: function( event, ui ) {
-                    var Stoppos = $(this).position();                    
-                    imgObj.left = Stoppos.left;
-                    imgObj.top = Stoppos.top;
-                    //console.log(imgObj); 
-                    
-                }
-            });
-            it.appendTo('#canvasOverLayer');
-            resizable.appendTo('#draggable-test');
-            creepyimgItem.appendTo("#resizable-item"); 
-            $.mobile.changePage( "#create", { transition: "slide", changeHash: false });
+            
         }
         
     }
@@ -563,7 +494,6 @@ $(function(){
     $("#guardarImg").click(function(){
         if(confirm('\u00BFRealmente deseas guardar esta imagen en tu CreepyAlbum?')){
             guarderImagen();    
-            
         }else{
             return false;
         }
@@ -636,6 +566,7 @@ $(function(){
             clearCanvasSpace();
             $("#canvasContent canvas").remove();
             $("#draggable-test").remove();
+            screen.unlockOrientation();
         });
     }
 
@@ -643,6 +574,7 @@ $(function(){
         clearCanvasSpace()
         $("#canvasContent *").remove();
         $("#draggable-test").remove();
+        screen.unlockOrientation();
         $.mobile.changePage( "#home", { transition: "slide", changeHash: false });
     }
 
@@ -737,8 +669,36 @@ $(function(){
     });
 
     function downloadFile(){
-        var b = new FileManager();
-        b.download_file('http://cdn.whenuseeit.com/2012/10/5/whenuseeit.com_75_1349730001.jpg','filder_a/dwonloads_folder/','creepy.jpg',Log('downloaded sucess'));
+
+        alert("iniciando descarga");
+
+        var fileTransfer = new FileTransfer();
+        var uri = encodeURI("http://picturestack.com/345/487/WUHvlcsnap201G4w.png");
+        var store = cordova.file.dataDirectory;
+        //Check for the file. 
+        window.resolveLocalFileSystemURL(store + fileName, appStart, downloadAsset);
+
+
+        fileTransfer.download(
+            uri,
+            store + "WUHvlcsnap201G4w.png",
+            function(entry) {
+                alert("download complete: " + entry.toURL());
+            },
+            function(error) {
+                alert("download error source " + error.source);
+                alert("download error target " + error.target);
+                alert("upload error code" + error.code);
+            },
+            false,
+            {
+                headers: {
+                    "Authorization": "Basic dGVzdHVzZXJuYW1lOnRlc3RwYXNzd29yZA=="
+                }
+            }
+        );
+
+
     };
 
 

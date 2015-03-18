@@ -121,7 +121,7 @@ canvas {
 
 .draggable-test {
 	border: none;
-	width: 50% !important;
+	
 	color: #fff;	
 	position: relative !important; 
 	z-index: 999;
@@ -130,17 +130,15 @@ canvas {
     vertical-align: top;
     *display: inline;   
     cursor: hand; 
-    cursor: pointer
+    cursor: pointer;
+    overflow: hidden !important;
 }
 
 .resizable-item {
 	border: none;	
-	width: 100%;
 	top: 0 !important;
 	left: 0 !important;
-	height: auto;
-	position: absolute;
-	width: 250px;
+	position: absolute; 
 }
 
 .resizable-item img {
@@ -247,7 +245,7 @@ canvas {
 	margin: 0 auto 5px auto;
 }
 
-.creepyfooter div {	
+.creepyfooter_footer div, .creepyfooter div {	
 	color: #cb0000 !important;
 	text-shadow:none;
 	font-family: 'unicaone', sans-serif;
@@ -259,7 +257,9 @@ canvas {
 	text-align: center;
 }
 
-.creepyfooter div img {
+
+
+.creepyfooter_footer div img, .creepyfooter div img {
 	height: 55px;
 	display: block;
 	margin: 0 auto 5px auto;

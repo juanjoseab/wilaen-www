@@ -2,7 +2,7 @@
 
 @media all and (min-width: 600px) {
     #home .title {
-		font-size: 100px;
+		font-size: 60px;
 	}
 }
 
@@ -43,11 +43,11 @@
 
 @media all and (min-width: 1025px) {
     #home .title {
-		font-size: 200px;
+		font-size: 150px;
 	}
 
 	#nuevacreepy .title {
-		font-size: 150px;
+		font-size: 100px;
 	}
 	.home_center_container p {
 		font-size: 45px;
