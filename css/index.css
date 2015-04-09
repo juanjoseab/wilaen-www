@@ -121,7 +121,7 @@ canvas {
 
 .draggable-test {
 	border: none;
-	
+	width: 50% !important;
 	color: #fff;	
 	position: relative !important; 
 	z-index: 999;
@@ -130,15 +130,17 @@ canvas {
     vertical-align: top;
     *display: inline;   
     cursor: hand; 
-    cursor: pointer;
-    overflow: hidden !important;
+    cursor: pointer
 }
 
 .resizable-item {
 	border: none;	
+	width: 100%;
 	top: 0 !important;
 	left: 0 !important;
-	position: absolute; 
+	height: auto;
+	position: absolute;
+	width: 250px;
 }
 
 .resizable-item img {
@@ -204,14 +206,24 @@ canvas {
     cursor: pointer;
     background-image: url(../img/rotate.png);
     background-size: 100%;
-    right: -25px !important;
+    position: absolute;
+    /*right: -25px !important;
     bottom: -25px !important;
+    */
+    top: 15px !important;
+    left: 15px !important;
     opacity: 0.7;
 }
 
 .ui-resizable-handle.ui-resizable-se.ui-icon.ui-icon-gripsmall-diagonal-se {
 	background-color: none;
 	background-image: url('../img/rz.png');
+	background-size: 100% 100%; 
+}
+
+.ui-resizable-handle.ui-resizable-nw {
+	background-color: none;
+	background-image: url('../img/rz-top.png');
 	background-size: 100% 100%; 
 }
 
@@ -245,7 +257,7 @@ canvas {
 	margin: 0 auto 5px auto;
 }
 
-.creepyfooter_footer div, .creepyfooter div {	
+.creepyfooter div {	
 	color: #cb0000 !important;
 	text-shadow:none;
 	font-family: 'unicaone', sans-serif;
@@ -257,9 +269,7 @@ canvas {
 	text-align: center;
 }
 
-
-
-.creepyfooter_footer div img, .creepyfooter div img {
+.creepyfooter div img {
 	height: 55px;
 	display: block;
 	margin: 0 auto 5px auto;

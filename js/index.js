@@ -464,7 +464,8 @@ $(function(){
                 var resizable = $('<div class="resizable-item" id="resizable-item" style="height:'+myCHeight+'px; width:'+myCWidth+'px" > </div>').resizable({
                     aspectRatio: true,
                     //handles: 'ne, se, sw, nw'
-                    handles: 'se'
+                    //handles: 'se'
+                    handles: 'nw'
                 });
                 var it = $('<div class="draggable-test" id="draggable-test"  />');
                 it.draggable({ 
