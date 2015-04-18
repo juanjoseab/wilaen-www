@@ -32,7 +32,9 @@ $(function(){
                 db.transaction(function(tr){
                     console.log("ejecutanto statements");
                     tr.executeSql('CREATE TABLE IF NOT EXISTS mygallery (id INTEGER PRIMARY KEY, uri);');
-                    
+                    tr.executeSql('CREATE TABLE IF NOT EXISTS app_update (id INTEGER PRIMARY KEY, date,update_version,banner_update,img_update);');
+                    tr.executeSql('INSERT INTO app_update (date,update_version,banner_update,img_update) VALUES ("2015-04-13", 0,1,1);');
+
                     tr.executeSql('CREATE TABLE IF NOT EXISTS banner (id INTEGER PRIMARY KEY, low,medium,high,href);');
                     tr.executeSql('INSERT INTO banner (low,medium,high,href) VALUES ("img/banners/low.jpg", "img/banners/medium.jpg","img/banners/high.jpg","http://rafael.servehttp.com/paranormal/");');
 
