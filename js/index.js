@@ -18,7 +18,27 @@ $(function(){
     var photoData;
     var db = window.openDatabase("Database", "1.0", "dbtx", 2000000000);
     var banner = {};
+    var params = {}
+
     banner.set = false;
+
+
+    params.app = {}
+    params.ws = {}
+
+    params.app.version = 1;
+    params.app.lastImg = 10;
+    params.app.lastBanner = 1;
+    params.updateImages = 0;
+    params.updateBanner = 0;
+
+    params.ws.user = "creepic_movil_app";
+    params.ws.pass = "wilaenCreepic775";
+    params.ws.url = 'http://localhost/ilifebelt/wilaen/creepypic-admin/rest';
+    params.ws.loginstring = "apiuser=" + params.ws.user + "&apipass="+params.ws.pass;
+    params.ws.checkversion = params.ws.url + '/get/lastAppVersion';
+    params.ws.getLastBanner = params.ws.url + '/get/lastBanner';
+    params.ws.getLastImgs = params.ws.url + '/get/lastImgs';
 
     function checkDb(){
         db.transaction(function(tx){
@@ -37,6 +57,9 @@ $(function(){
 
                     tr.executeSql('CREATE TABLE IF NOT EXISTS banner (id INTEGER PRIMARY KEY, low,medium,high,href);');
                     tr.executeSql('INSERT INTO banner (low,medium,high,href) VALUES ("img/banners/low.jpg", "img/banners/medium.jpg","img/banners/high.jpg","http://rafael.servehttp.com/paranormal/");');
+
+                    tr.executeSql('CREATE TABLE IF NOT EXISTS version (id INTEGER PRIMARY KEY, date, version, banner, img);');
+                    tr.executeSql('INSERT INTO version (date, version, banner, img) VALUES (0,1,0,0);');                    
 
                     tr.executeSql('CREATE TABLE IF NOT EXISTS img (id INTEGER PRIMARY KEY, name, uri);');
                     tr.executeSql('INSERT INTO img (name, uri) VALUES ("Ovni", "img/pics/ovni.png");');
@@ -67,7 +90,108 @@ $(function(){
             return true;
         });
     }
+
+
+
+    function setAppVerision(){
+        db.transaction(function(tx){
+            tx.executeSql("SELECT * FROM version ORDER BY id DESC LIMIT 1",null,function(tx,results){
+                if(results.rows.length > 0){                                    
+                    var item = results.rows.item(0);
+                    params.app.version = item.id;
+                }
+            });
+        },
+        function(err){alert(err.message);},
+        function(){});
+    }
+
+    function checkAppVerision(){
+        
+        $.ajax({
+            type:           "POST",
+            data:           params.ws.loginstring + "&v=" + params.app.version,
+            url:            params.ws.checkversion,
+            success: function(res){
+                console.log(res);
+                var version = jQuery.parseJSON(res);
+                //console.log(appversion);
+                appversion = version[0];
+                if(appversion.id){
+                    console.log(appversion.id);
+                    if(appversion.id>params.app.version){
+                        db.transaction(function(tr){
+                             $('<div>').simpledialog2({
+                                mode: 'button',
+                                headerText: 'Click One...',
+                                headerClose: true,
+                                buttonPrompt: 'Please Choose One',
+                                buttons : {
+                                  'OK': {
+                                    click: function () { 
+                                      $('#buttonoutput').text('OK');
+                                    }
+                                  },
+                                  'Cancel': {
+                                    click: function () { 
+                                      $('#buttonoutput').text('Cancel');
+                                    },
+                                    icon: "delete",
+                                    theme: "c"
+                                  }
+                                }
+                              });
+                            tr.executeSql('INSERT INTO version (date,version,banner,img) VALUES ( "'+appversion.date+'","'+appversion.id+'","'+appversion.banner_update+'","'+appversion.img_update+'");');
+                        }, function(trerr){
+                            console.log(trerr.message);
+                            return false;
+                        }, function(tr){
+                            //console.log(tr);
+                            return true;
+                        });
+                    }else{
+
+                    }
+                }
+            }, 
+
+        });
+    }
+
+
+
+
+
     checkDb();
+    setAppVerision();
+    checkAppVerision();
+
+
+    function checkConnection() {
+        console.log(navigator.connection);
+        /*if(navigator.connection.type){
+            console.log(navigator.connection)
+            /*var networkState = navigator.connection.type;
+
+            var states = {};
+            states[Connection.UNKNOWN]  = 'Unknown connection';
+            states[Connection.ETHERNET] = 'Ethernet connection';
+            states[Connection.WIFI]     = 'WiFi connection';
+            states[Connection.CELL_2G]  = 'Cell 2G connection';
+            states[Connection.CELL_3G]  = 'Cell 3G connection';
+            states[Connection.CELL_4G]  = 'Cell 4G connection';
+            states[Connection.CELL]     = 'Cell generic connection';
+            states[Connection.NONE]     = 'No network connection';
+
+            alert('Connection type: ' + states[networkState]);*/
+        //}
+    }
+
+    checkConnection();
+
+    //console.log(params.app.version)
+
+
 
     function saveImgOnDB(imgdata){
         db.transaction(function(tr){
@@ -657,8 +781,8 @@ $(function(){
 
             });
             prepareMyCreepyGallery();
-            }
         }
+    }
 
 
     $("body").on('click',".deleteMyCreepic",function(){
